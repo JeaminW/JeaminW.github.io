@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <title>Test Page</title>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width">
+                <style type="text/css">
+                    
+                    * {
+                        font-family: Arial;
+                    }
+                
+                .button{
+                    border: 1px solid #CCC;
+                    border-radius: 4px;
+                    padding: 6px 10px;
+                    margin: 5px;
+                    word-wrap: break-word;
+                }
+                
+                #consoleInput{
+                    margin: 0;
+                    padding: 10px;
+                    width: 100%;
+                    font-size: 20px;
+                }
+                
+                pre{
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                .tips{
+                    font-size: 0.8em;
+                    color: #999;
+                    margin-top: 5px;
+                }
+                
+            </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            document.write("<p>UserAgent: ")
+            document.write(navigator.userAgent + "</p>")
+        </script>
+        <img id="preview" src="http://www.gravatar.com/avatar/0e39d18b89822d1d9871e0d1bc839d06?s=128&d=identicon&r=PG">
+        <div class="button" onclick="convImg2Base64('preview')">Convert img to base64</div>
+        <div class="button" onclick="call_jsbridge()">jsbridge</div>
+        <div id="output" class="button"></div>
+        <canvas id="myCanvas"/>
+        <iframe id="myFrame"></iframe>
+        <script type="text/javascript">
+    // ok, we're good
+    var readCanvasData = function(oCanvas) {
+        var iWidth = parseInt(oCanvas.width);
+        var iHeight = parseInt(oCanvas.height);
+        return oCanvas.getContext("2d").getImageData(0,0,iWidth,iHeight);
+    }
+
+    // base64 encodes either a string or an array of charcodes
+    var base64EncodeData = function(data) {
+        var strData = "";
+        if (typeof data == "string") {
+            strData = data;
+        } else {
+            var aData = data;
+            for (var i=0;i<aData.length;i++) {
+                strData += String.fromCharCode(aData[i]);
+            }
+        }
+        return btoa(strData);
+    }
+        function convImg2Base64 (elemId) {
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var img = document.getElementById(elemId);
+            ctx.drawImage(img, 0, 0);
+            var base64Str = c.toDataURL();
+            // var imgData = readCanvasData(c);
+            // var base64Str = base64EncodeData(imgData);
+            var o = document.getElementById("output");
+            o.innerHtml = base64Str;
+        }
+        function call_jsbridge () {
+            var myFrame = document.getElementById('myFrame');
+            myFrame.src = '';
+            myFrame.src = 'jsbridge://injection';
+        }
+    </script>
+    </body>
+</html>
